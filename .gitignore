@@ -1,0 +1,11 @@
+Makefile
+config.h
+config.mk
+images/Makefile
+src/Makefile
+src/fbxkb
+subst.sed
+tools/Makefile
+tools/options.sh
+*.rej
+*.patch

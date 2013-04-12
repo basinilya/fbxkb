@@ -298,7 +298,7 @@ get_group_info()
         ERR("can't alloc kbd info\n");
         exit(1);
     }
-    //kbd_desc_ptr->dpy = GDK_DISPLAY_XDISPLAY(gdk_display_get_default());
+    //kbd_desc_ptr->dpy = GDK_DISPLAY();
     if (XkbGetControls(dpy, XkbAllControlsMask, kbd_desc_ptr) !=
             Success) {
         ERR("can't get Xkb controls\n");
@@ -369,8 +369,7 @@ Xerror_handler(Display * d, XErrorEvent * ev)
     char buf[256];
 
     ENTER;
-    XGetErrorText(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                  ev->error_code, buf, 256);
+    XGetErrorText(GDK_DISPLAY(), ev->error_code, buf, 256);
     ERR( "fbxkb : X error: %s\n", buf);
     RET();
 }
@@ -381,15 +380,14 @@ init()
     int dummy;
 
     ENTER;
-    if (!XkbQueryExtension(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                           &dummy, &xkb_event_type, &dummy,
+    if (!XkbQueryExtension(GDK_DISPLAY(), &dummy, &xkb_event_type, &dummy,
             &dummy, &dummy)) {
         ERR("no XKB extension\n");
         exit(1);
     }
     XSetLocaleModifiers("");
     XSetErrorHandler((XErrorHandler) Xerror_handler);
-    dpy = GDK_DISPLAY_XDISPLAY(gdk_display_get_default());
+    dpy = GDK_DISPLAY();
     if (chdir(IMGPREFIX)) {
         ERR("can't chdir to %s\n", IMGPREFIX);
         exit(1);
@@ -422,7 +420,7 @@ main(int argc, char *argv[])
     GError *error = NULL;
 
     ENTER;
-    setlocale(LC_ALL, "");
+    gtk_set_locale();
     context = g_option_context_new("- X11 keyboard switcher");
     g_option_context_add_main_entries(context, entries, NULL);
     g_option_context_add_group(context, gtk_get_option_group(TRUE));

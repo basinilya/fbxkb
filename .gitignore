@@ -7,3 +7,5 @@ src/fbxkb
 subst.sed
 tools/Makefile
 tools/options.sh
+*.rej
+*.patch
